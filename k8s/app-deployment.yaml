@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sakila-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakila-app
+  template:
+    metadata:
+      labels:
+        app: sakila-app
+    spec:
+      containers:
+      - name: sakila-app
+        image: sakila-app:latest
+        imagePullPolicy: Never
+        env:
+        - name: DB_SOURCE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: db-dsn
+        ports:
+        - containerPort: 8080
