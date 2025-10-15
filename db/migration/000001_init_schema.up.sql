@@ -40,6 +40,14 @@ CREATE TABLE actor (
   PRIMARY KEY  (actor_id),
   KEY idx_actor_last_name (last_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ======================
 -- Insert data into actor
 -- ======================

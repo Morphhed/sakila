@@ -33,6 +33,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createCountryStmt, err = db.PrepareContext(ctx, createCountry); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateCountry: %w", err)
 	}
+	if q.createUserStmt, err = db.PrepareContext(ctx, createUser); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateUser: %w", err)
+	}
 	if q.deleteActorStmt, err = db.PrepareContext(ctx, deleteActor); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteActor: %w", err)
 	}
@@ -50,6 +53,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getCountryStmt, err = db.PrepareContext(ctx, getCountry); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCountry: %w", err)
+	}
+	if q.getUserByUsernameStmt, err = db.PrepareContext(ctx, getUserByUsername); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUserByUsername: %w", err)
 	}
 	if q.listActorsStmt, err = db.PrepareContext(ctx, listActors); err != nil {
 		return nil, fmt.Errorf("error preparing query ListActors: %w", err)
@@ -92,6 +98,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createCountryStmt: %w", cerr)
 		}
 	}
+	if q.createUserStmt != nil {
+		if cerr := q.createUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createUserStmt: %w", cerr)
+		}
+	}
 	if q.deleteActorStmt != nil {
 		if cerr := q.deleteActorStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteActorStmt: %w", cerr)
@@ -120,6 +131,11 @@ func (q *Queries) Close() error {
 	if q.getCountryStmt != nil {
 		if cerr := q.getCountryStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getCountryStmt: %w", cerr)
+		}
+	}
+	if q.getUserByUsernameStmt != nil {
+		if cerr := q.getUserByUsernameStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserByUsernameStmt: %w", cerr)
 		}
 	}
 	if q.listActorsStmt != nil {
@@ -199,12 +215,14 @@ type Queries struct {
 	createActorStmt         *sql.Stmt
 	createCityStmt          *sql.Stmt
 	createCountryStmt       *sql.Stmt
+	createUserStmt          *sql.Stmt
 	deleteActorStmt         *sql.Stmt
 	deleteCityStmt          *sql.Stmt
 	deleteCountryStmt       *sql.Stmt
 	getActorStmt            *sql.Stmt
 	getCityStmt             *sql.Stmt
 	getCountryStmt          *sql.Stmt
+	getUserByUsernameStmt   *sql.Stmt
 	listActorsStmt          *sql.Stmt
 	listCitiesStmt          *sql.Stmt
 	listCitiesByCountryStmt *sql.Stmt
@@ -221,12 +239,14 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createActorStmt:         q.createActorStmt,
 		createCityStmt:          q.createCityStmt,
 		createCountryStmt:       q.createCountryStmt,
+		createUserStmt:          q.createUserStmt,
 		deleteActorStmt:         q.deleteActorStmt,
 		deleteCityStmt:          q.deleteCityStmt,
 		deleteCountryStmt:       q.deleteCountryStmt,
 		getActorStmt:            q.getActorStmt,
 		getCityStmt:             q.getCityStmt,
 		getCountryStmt:          q.getCountryStmt,
+		getUserByUsernameStmt:   q.getUserByUsernameStmt,
 		listActorsStmt:          q.listActorsStmt,
 		listCitiesStmt:          q.listCitiesStmt,
 		listCitiesByCountryStmt: q.listCitiesByCountryStmt,

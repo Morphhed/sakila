@@ -13,12 +13,14 @@ type Querier interface {
 	CreateActor(ctx context.Context, arg CreateActorParams) (sql.Result, error)
 	CreateCity(ctx context.Context, arg CreateCityParams) (sql.Result, error)
 	CreateCountry(ctx context.Context, country string) (sql.Result, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error)
 	DeleteActor(ctx context.Context, actorID uint16) error
 	DeleteCity(ctx context.Context, cityID uint16) error
 	DeleteCountry(ctx context.Context, countryID uint16) error
 	GetActor(ctx context.Context, actorID uint16) (Actor, error)
 	GetCity(ctx context.Context, cityID uint16) (City, error)
 	GetCountry(ctx context.Context, countryID uint16) (Country, error)
+	GetUserByUsername(ctx context.Context, username string) (User, error)
 	ListActors(ctx context.Context) ([]Actor, error)
 	ListCities(ctx context.Context) ([]City, error)
 	ListCitiesByCountry(ctx context.Context, countryID uint16) ([]City, error)

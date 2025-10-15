@@ -41,3 +41,14 @@ CREATE TABLE actor (
   PRIMARY KEY (actor_id),
   KEY idx_actor_last_name (last_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -------------------------
+-- Table: users (for authentication)
+-- -------------------------
+CREATE TABLE users (
+  user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

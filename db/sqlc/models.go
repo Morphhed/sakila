@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -26,4 +27,11 @@ type Country struct {
 	CountryID  uint16    `db:"country_id" json:"country_id"`
 	Country    string    `db:"country" json:"country"`
 	LastUpdate time.Time `db:"last_update" json:"last_update"`
+}
+
+type User struct {
+	UserID       uint32       `db:"user_id" json:"user_id"`
+	Username     string       `db:"username" json:"username"`
+	PasswordHash string       `db:"password_hash" json:"password_hash"`
+	CreatedAt    sql.NullTime `db:"created_at" json:"created_at"`
 }
